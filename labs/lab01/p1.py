@@ -43,12 +43,12 @@ while (cmd != "checkout"):
         # Grab item from Dict
         item = parse[1]
         if item in fruitDict.keys():
-            print(item + " are " + fruitDict.get(item) + " per pound")
+            print(item + " are $" + fruitDict.get(item) + " per pound")
         else:
             print("Error! " + item + " not found!")
 
 # Calculate Total
-print("total is " + f"{total:.3f}")
+print("total is $" + str(total))
 exit(0)
  
         
