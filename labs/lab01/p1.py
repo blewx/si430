@@ -48,7 +48,7 @@ while (cmd != "checkout"):
             print("Error! " + item + " not found!")
 
 # Calculate Total
-print("total is " + f"{total:.2f}")
+print("total is " + f"{total:.3f}")
 exit(0)
  
         
