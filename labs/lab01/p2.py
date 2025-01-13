@@ -4,28 +4,39 @@ with open(file, 'rb') as f:
     data = f.read()
 
 lower_val = 0
-for i in range(len(data)):
-    if i % 16 == 0 or i == len(data):
-        bytes = data[lower_val:i]
-        if i > 0:
-            print('|',end="")
-            for byte in bytes:
-                if byte == ord('\n'):  #check to see if the byte is = \n, this means
-                                       #that it read in a period as a newline,
-                                       #so change that \n into a . for printing
-                    print('.',end="")
-                else:
-                    print(chr(byte), end="")
-            print('|')
-            lower_val = i
-        print('{:08x}'.format(i), end='  ') #print bytes read sofar
-    elif i % 8 == 0:
-        print('{:02x}'.format(data[i]), end='  ') #special print to print double
-                                                  #space for formatting between
-                                                  #bytes 8 and 9 of each 16 byte
-                                                  #row
-    else:
-        print('{:02x}'.format(data[i]), end=' ')
 
-print()
+num_iters = len(data) #variable that figures out how far past data lenght the program needs to run so that it
+              #prints the correct number of double spaces to print the last text line (|****|)
+while(num_iters % 16  == 0):
+    num_iters += 1
+num_iters = int(num_iters/16)
+
+
+for k in range(num_iters+1):
+    bytes = data[k*16:(k+1)*16]
+    print('{:08x}'.format(k*16), end='  ') #print bytes read sofar
+    #print(k, "  ", num_iters)
+    for i in range(0 + (k*16),16 + (k*16)):
+        #print(" | ")
+        if i >= len(data):
+            print('  ', end = ' ')
+            if i % 8 == 0 and (i % 16 == 8) or (i % 16 == 15):
+                print("", end=' ')
+        elif i % 8 == 0 and (i % 16 == 8) or (i % 16 == 15):
+            print('{:02x}'.format(data[i]), end='  ') #special print to print double
+                                                    #space for formatting between
+                                                    #bytes 8 and 9 of each 16 byte
+                                                    #row
+        else:
+            print('{:02x}'.format(data[i]), end=' ')
+    print('|',end="")
+    for byte in bytes:
+        if byte == ord('\n'):  #check to see if the byte is = \n, this means
+                            #that it read in a period as a newline,
+                            #so change that \n into a . for printing
+            print('.',end="")
+        else:
+            print(chr(byte), end="")
+    print('|')
+    
 print('{:08x}'.format(len(data)))
