@@ -31,12 +31,15 @@ for k in range(num_iters+1):
             print('{:02x}'.format(data[i]), end=' ')
     print('|',end="")
     for byte in bytes:
-        if byte == ord('\n'):  #check to see if the byte is = \n, this means
+        if(byte.isprintable()):
+        	if byte == ord('\n'):  #check to see if the byte is = \n, this means
                             #that it read in a period as a newline,
                             #so change that \n into a . for printing
-            print('.',end="")
+        		print('.',end="")
+     		else:
+            	print(chr(byte), end="")
         else:
-            print(chr(byte), end="")
+            print('.',end="")
     print('|')
     
 print('{:08x}'.format(len(data)))
