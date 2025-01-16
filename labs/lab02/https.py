@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 # https.py
 
-import socket
+from socket import *
 import sys
 import select
 
-sock = socket.socket()
+sock = socket()
 sock.bind(("0.0.0.0",8000))
 sock.listen()
 (newsock, addr) = sock.accept()
