@@ -35,6 +35,9 @@ while True:
     # Write Data
     if sys.stdin in r_sockets:
         msg = sys.stdin.readline()
+        msg = msg.strip()
+        if msg == "quit":
+            break
         if newaddr != '':
             sock.sendto(msg.encode(), newaddr)
 
