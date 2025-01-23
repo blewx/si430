@@ -15,14 +15,13 @@ sock = socket(AF_INET, SOCK_DGRAM)
 sock.bind((ADDR,PORT))
 
 while True:
-    
     # Get socket list
     socklist = [sock, sys.stdin]
     (r_sockets, w_sockets, e_sockets) = select.select(socklist, [], [])
     
     # Error
     if e_sockets:
-        break;
+        break
 
     # Receive Data
     if sock in r_sockets:
@@ -40,6 +39,4 @@ while True:
             break
         if newaddr != '':
             sock.sendto(msg.encode(), newaddr)
-
-
 sock.close()
