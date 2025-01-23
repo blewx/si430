@@ -6,7 +6,7 @@ import sys
 import select
 
 sock = socket()
-sock.bind(("0.0.0.0",8001))
+sock.bind(("0.0.0.0",8000))
 sock.listen()
 (newsock, addr) = sock.accept()
 print("connection from", addr)
@@ -26,10 +26,16 @@ while True:
     print(data)
     
     method, path, _ = data.split(" ", 2)
-
+    print(path)
+    path = path.strip("/")
+    print(path)
     if method == "GET":
-        with open("index.html", "r") as f:
-            content = f.read()
+        if(path == "" or path == "favicon.ico"):
+            with open("index.html", "r") as f:
+                content = f.read()
+        else:
+            with open(path, "r") as f:
+                content = f.read()
 
         response = (
             "HTTP/1.1 200 OK\r\n"
