@@ -6,7 +6,7 @@ import sys
 import select
 
 sock = socket()
-sock.bind(("0.0.0.0",8000))
+sock.bind(("0.0.0.0",8001))
 sock.listen()
 (newsock, addr) = sock.accept()
 print("connection from", addr)
@@ -24,6 +24,21 @@ while True:
     if not data:  # no data means the connection has been closed.
       break
     print(data)
+    
+    method, path, _ = data.split(" ", 2)
+
+    if method == "GET":
+        with open("index.html", "r") as f:
+            content = f.read()
+
+        response = (
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/html\r\n"
+            f"Content-Length: {len(content)}\r\n"
+            "\r\n"
+            f"{content}"
+        )
+        newsock.sendall(response.encode())
 
   if sys.stdin in r_sockets:  # we have something to read from sys.stdin!
     s = sys.stdin.readline()  # we need to use the low-level function readline()
