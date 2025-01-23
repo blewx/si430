@@ -6,9 +6,11 @@ def showpkts(data):
     offset = []
     for k in range(24,len(data)):
         if header == 8: #get size
-            data_size.append(data[k] + data[k+1] + data[k+2] + data[k+3])
+            data_size.append(data[k] + data[k+1]*256 + data[k+2]*65536 +
+                             data[k+3]*16777216)
             offset.append(k+8)
-            header = -(data[k] + data[k+1] + data[k+2] + data[k+3]) - 8
+            header = -(data[k] + data[k+1]*256 + data[k+2]*65536 +
+                             data[k+3]*16777216)- 8
             #subtract an extra 8 because we're still reading in the data size
         header += 1          
 
