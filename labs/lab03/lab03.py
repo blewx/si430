@@ -77,8 +77,9 @@ def showpkts_Eth(data):
         print()
 
 
-import sys
-file = sys.argv[1]
-with open(file, 'rb') as f:
-    data = f.read()
-showpkts_Eth(data)
+if '__name__' == '__main__':
+    import sys
+    file = sys.argv[1]
+    with open(file, 'rb') as f:
+        data = f.read()
+    showpkts_Eth(data)

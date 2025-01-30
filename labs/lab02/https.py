@@ -6,7 +6,7 @@ import sys
 import select
 
 sock = socket()
-sock.bind(("0.0.0.0",8001))
+sock.bind(("0.0.0.0",9000))
 sock.listen()
 (newsock, addr) = sock.accept()
 print("connection from", addr)
