@@ -60,13 +60,18 @@ def showpkts_Eth(data):
                 print('\n',end="")
             else:
                 print(':',end="")
-        print("Type= ", end="")
-        for k in range(12+offset[i], 14+offset[i]): #read in the size of the first packet
+        #print("Type= ", end="")
+        '''for k in range(12+offset[i], 14+offset[i]): #read in the size of the first packet
             print('{:02x}'.format(data[k]),end= "")
             if k == 13+offset[i]:
                 print('\n',end="")
             else:
                 print(' ',end="")
+        '''
+        
+        #for k in range(12+offset[i], 14+offset[i]): #read in the size of the first packet
+        #print("= ", 14+offset[i])
+        print("IHL= ", 15+offset[i])
 
         for k in range(offset[i]+14, data_size[i]+offset[i]): #read in the size of the first packet
             print('{:02x}'.format(data[k]),end= " ")
@@ -82,4 +87,4 @@ import sys
 file = sys.argv[1]
 with open(file, 'rb') as f:
     data = f.read()
-showpkts(data)
+showpkts_Eth(data)
