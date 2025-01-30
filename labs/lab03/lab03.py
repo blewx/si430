@@ -45,7 +45,6 @@ def showpkts_Eth(data):
 
     for i in range(len(data_size)):
         counter = 1
-        print("data:")
         print("Dst-MAC= ", end="")
         for k in range(offset[i], 6+offset[i]): #read in the size of the first packet
             print('{:02x}'.format(data[k]),end= "")
@@ -68,6 +67,7 @@ def showpkts_Eth(data):
             else:
                 print(' ',end="")
 
+        print("data:")
         for k in range(offset[i]+14, data_size[i]+offset[i]): #read in the size of the first packet
             print('{:02x}'.format(data[k]),end= " ")
             if counter  % 16  == 0:
