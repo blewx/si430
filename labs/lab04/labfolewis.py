@@ -25,7 +25,69 @@ def showpkts(data):
             counter += 1           
         print()
         print()
+
+
+def showpkts_TCP(data, ip1, ip2):
+
+    data_size = []
+    header = 0
+    offset = []
+    #convert both ip strings to hex lists
+    ip1h = ip1.split(".")
+    ip2h = ip2.split(".")
+    for i in range(4):
+        ip1h[i] = hex(int(ip1h[i]))
+        ip2h[i] = hex(int(ip2h[i]))
+    print(ip1h)
+    print(ip2h)
+'''
+    for k in range(24,len(data)):
         
+
+    for i in range(len(data_size)):
+        counter = 1
+        print("Dst-MAC= ", end="")
+        for k in range(offset[i], 6+offset[i]): #read in the size of the first packet
+            print('{:02x}'.format(data[k]),end= "")
+            if k == 5+offset[i]:
+                print('\n',end="")
+            else:
+                print(':',end="")
+        print("Src-MAC= ", end="")
+        for k in range(6+offset[i], 12+offset[i]): #read in the size of the first packet
+            print('{:02x}'.format(data[k]),end= "")
+            if k == 11+offset[i]:
+                print('\n',end="")
+            else:
+                print(':',end="")
+        
+        #for k in range(12+offset[i], 14+offset[i]): #read in the size of the first packet
+        #print("= ", 14+offset[i])
+        print("IHL= ", (data[14+offset[i]])%16) #mod 16 bc it is 
+        print("Total Length= ", data[(17+offset[i])])
+        
+        print("Dst-IP= ",end =" ")
+        for k in range(26+offset[i], 30+offset[i]): #read in the size of the first packet
+            if k == 29+offset[i]:
+                print(data[k],end="\n")
+            else:
+                print(data[k],end=".")
+
+        print("Src-IP= ",end =" ")
+        for k in range(30+offset[i], 34+offset[i]): #read in the size of the first packet
+            if k == 33+offset[i]:
+                print(data[k],end="\n")
+            else:
+                print(data[k],end=".")
+
+        print("data:")
+        for k in range(offset[i]+34, data_size[i]+offset[i]): #read in the size of the first packet
+            print('{:02x}'.format(data[k]),end= " ")
+            if counter  % 16  == 0:
+                print()
+            counter += 1           
+        print()
+'''
 
 def showpkts_Eth(data):
 
@@ -59,16 +121,7 @@ def showpkts_Eth(data):
                 print('\n',end="")
             else:
                 print(':',end="")
-        #print("Type= ", end="")
-        '''for k in range(12+offset[i], 14+offset[i]): #read in the size of the first packet
-            print('{:02x}'.format(data[k]),end= "")
-            if k == 13+offset[i]:
-                print('\n',end="")
-            else:
-                print(' ',end="")
-        '''
         
-        #for k in range(12+offset[i], 14+offset[i]): #read in the size of the first packet
         #print("= ", 14+offset[i])
         print("IHL= ", (data[14+offset[i]])%16) #mod 16 bc it is 
         print("Total Length= ", data[(17+offset[i])])
@@ -101,4 +154,4 @@ import sys
 file = sys.argv[1]
 with open(file, 'rb') as f:
     data = f.read()
-showpkts_Eth(data)
+showpkts_TCP(data, "192.168.172.4", "192.168.172.5")
