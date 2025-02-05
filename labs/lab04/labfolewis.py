@@ -45,7 +45,6 @@ def showpkts_Eth(data):
 
     for i in range(len(data_size)):
         counter = 1
-        print("data:")
         print("Dst-MAC= ", end="")
         for k in range(offset[i], 6+offset[i]): #read in the size of the first packet
             print('{:02x}'.format(data[k]),end= "")
@@ -71,14 +70,29 @@ def showpkts_Eth(data):
         
         #for k in range(12+offset[i], 14+offset[i]): #read in the size of the first packet
         #print("= ", 14+offset[i])
-        print("IHL= ", 15+offset[i])
+        print("IHL= ", (data[14+offset[i]])%16) #mod 16 bc it is 
+        print("Total Length= ", data[(17+offset[i])])
+        
+        print("Dst-IP= ",end =" ")
+        for k in range(26+offset[i], 30+offset[i]): #read in the size of the first packet
+            if k == 29+offset[i]:
+                print(data[k],end="\n")
+            else:
+                print(data[k],end=".")
 
-        for k in range(offset[i]+14, data_size[i]+offset[i]): #read in the size of the first packet
+        print("Src-IP= ",end =" ")
+        for k in range(30+offset[i], 34+offset[i]): #read in the size of the first packet
+            if k == 33+offset[i]:
+                print(data[k],end="\n")
+            else:
+                print(data[k],end=".")
+
+        print("data:")
+        for k in range(offset[i]+34, data_size[i]+offset[i]): #read in the size of the first packet
             print('{:02x}'.format(data[k]),end= " ")
             if counter  % 16  == 0:
                 print()
             counter += 1           
-        print()
         print()
 
 
