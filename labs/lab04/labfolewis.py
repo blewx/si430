@@ -52,6 +52,8 @@ def showpkts_TCP(data, ip1, ip2):
         ip2h[1] == data[k+5] and 
         ip2h[2] == data[k+6] and 
         ip2h[3] == data[k+7] ) :
+            offset.append(k)
+            print(data[k-9])
             for i in range(8):
                 print(data[k+i],end="")
                 if i == 3 or i == 7:
@@ -59,7 +61,8 @@ def showpkts_TCP(data, ip1, ip2):
                 else:
                     print("",end=".")
             print()
-
+    for i in offset:
+        print(str(hex(i)) + " protocol == " + str( data[offset[i]-3]))
     
 '''
     for k in range(24,len(data)):
