@@ -36,10 +36,31 @@ def showpkts_TCP(data, ip1, ip2):
     ip1h = ip1.split(".")
     ip2h = ip2.split(".")
     for i in range(4):
-        ip1h[i] = hex(int(ip1h[i]))
-        ip2h[i] = hex(int(ip2h[i]))
+        ip1h[i] = int(ip1h[i])#hex(int(ip1h[i]))
+        ip2h[i] = int(ip2h[i])#hex(int(ip1h[i]))
     print(ip1h)
     print(ip2h)
+
+    for k in range(24, len(data)):
+        #print(ip1h[0])
+        #print(data[k])
+        if ( ip1h[0] == data[k] and 
+        ip1h[1] == data[k+1] and 
+        ip1h[2] == data[k+2] and 
+        ip1h[3] == data[k+3] and 
+        ip2h[0] == data[k+4] and 
+        ip2h[1] == data[k+5] and 
+        ip2h[2] == data[k+6] and 
+        ip2h[3] == data[k+7] ) :
+            for i in range(8):
+                print(data[k+i],end="")
+                if i == 3 or i == 7:
+                    print("",end=" ")
+                else:
+                    print("",end=".")
+            print()
+
+    
 '''
     for k in range(24,len(data)):
         
