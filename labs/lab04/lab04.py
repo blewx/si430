@@ -32,18 +32,15 @@ def showpkts_TCP(data, ip1, ip2):
     data_size = []
     header = 0
     offset = []
-    #convert both ip strings to hex lists
+    #convert both ip strings to int lists
     ip1h = ip1.split(".")
     ip2h = ip2.split(".")
     for i in range(4):
-        ip1h[i] = int(ip1h[i])#hex(int(ip1h[i]))
-        ip2h[i] = int(ip2h[i])#hex(int(ip1h[i]))
-    #print(ip1h)
-    #print(ip2h)
+        ip1h[i] = int(ip1h[i])
+        ip2h[i] = int(ip2h[i])
 
     for k in range(24, len(data)):
-        #print(ip1h[0])
-        #print(data[k])
+        #check to see if we are looking at the correct IP addresses.
         if ( (ip1h[0] == data[k] and 
               ip1h[1] == data[k+1] and 
               ip1h[2] == data[k+2] and 
@@ -64,30 +61,28 @@ def showpkts_TCP(data, ip1, ip2):
                 offset.append(k)
     
     for i in offset:
-        #print(data[i-10], end = " ")
-        #print(data[i-9])
-        #print(str(hex(data[i-10])) +" " + str(hex(data[i-9])) + " " +
-             # str(hex(data[i-12]//16)) )
         data_len = (data[i-9] + data[i-10]*256) #subtract data header len to get past the
         #header
         ip_header_len = (data[i-12]%16)*4 
         tcp_header_len = (data[i+20]//16)*4 
 
+        #find the ips and ports for both the sender and receiver
         sender_ip = str(data[i]) + "." + str(data[i+1]) + "." + str(data[i+2]) + "." + str(data[i+3])
         receiver_ip = str(data[i+4]) + "." + str(data[i+5]) + "." + str(data[i+6]) + "." + str(data[i+7])
         sender_port = (data[i+9] + data[i+8]*256)         
         receiver_port = (data[i+11] + data[i+10]*256) 
+
+        #filter out if there is no payload
         if data_len - ip_header_len - tcp_header_len > 0:
             print(sender_ip + "(" + str(sender_port) + ") -> " + receiver_ip + "(" +
               str(receiver_port) + ") :")
+            #print the data
             to_print = ""
             for k in range(i + 40, i + 40 + data_len - ip_header_len -
                            tcp_header_len):
                 to_print += chr(data[k])
             print("",end="   ")
             print(to_print.encode())
-        #print(str(hex(i)) + " protocol == " + str( data[i-3]) + " len == " +
-        #       str(data_len) + " data header len == " + str(data_header_len))
 
 
 
@@ -123,34 +118,38 @@ def showpkts_IP(data):
     for i in range(len(data_size)):
         counter = 1
         print("Dst-MAC= ", end="")
-        for k in range(offset[i], 6+offset[i]): #read in the size of the first packet
+        for k in range(offset[i], 6+offset[i]): 
             print('{:02x}'.format(data[k]),end= "")
             if k == 5+offset[i]:
                 print('\n',end="")
             else:
                 print(':',end="")
+        
+        #Read in the src-mac
         print("Src-MAC= ", end="")
-        for k in range(6+offset[i], 12+offset[i]): #read in the size of the first packet
+        for k in range(6+offset[i], 12+offset[i]): 
             print('{:02x}'.format(data[k]),end= "")
             if k == 11+offset[i]:
                 print('\n',end="")
             else:
                 print(':',end="")
 
-        #print("= ", 14+offset[i])
-        print("IHL= ", (data[14+offset[i]])%16) #mod 16 bc it is 
+        
+        print("IHL= ", (data[14+offset[i]])%16) #mod 16 bc it is the second bit
+        #not the whole byte
+
         print("Total Length= ", data[(17+offset[i])])
         
 
         print("Src-IP= ",end =" ")
-        for k in range(26+offset[i], 30+offset[i]): #read in the size of the first packet
+        for k in range(26+offset[i], 30+offset[i]): #read in the src-ip
             if k == 29+offset[i]:
                 print(data[k],end="\n")
             else:
                 print(data[k],end=".")
         
         print("Dst-IP= ",end =" ")
-        for k in range(30+offset[i], 34+offset[i]): #read in the size of the first packet
+        for k in range(30+offset[i], 34+offset[i]): #read in the dst-ip
             if k == 33+offset[i]:
                 print(data[k],end="\n")
             else:
@@ -158,9 +157,7 @@ def showpkts_IP(data):
 
        
         print("data:")
-        #print(str(offset[i]+34) + " " + str( offset[i] + 34 + (
-        #    data[17+offset[i]] - 64)))
-        for k in range(offset[i]+34, offset[i] + 34 + ( data[17+offset[i]] - 20)): #read in the size of the first packet
+        for k in range(offset[i]+34, offset[i] + 34 + ( data[17+offset[i]] - 20)): #loop through each peice of data to print it
             print('{:02x}'.format(data[k]),end= " ")
             if counter  % 16  == 0:
                 print()
