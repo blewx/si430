@@ -62,7 +62,15 @@ def showpkts_TCP(data, ip1, ip2):
                     print("",end=".")
             print()
     for i in offset:
-        print(str(hex(i)) + " protocol == " + str( data[offset[i]-3]))
+        print(data[i-10], end = " ")
+        print(data[i-9])
+        data_len = (data[i-9] + data[i-10]*256) #subtract data header len to get past the
+        #header
+        data_header_len = (data[i-12]%16)*4 
+
+
+        print(str(hex(i)) + " protocol == " + str( data[i-3]) + " len == " +
+                str(data_len) + " data header len == " + str(data_header_len))
     
 '''
     for k in range(24,len(data)):
