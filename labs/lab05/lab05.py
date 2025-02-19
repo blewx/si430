@@ -46,7 +46,7 @@ def showpkts_TCP():
 
         print("src:  ", Source_ip, "(port) [", end="")
         for i in range(0,6):
-            print(Source_mac[i],end="")
+            print("f{Source_mac[i]:02x}",end="")
             if i < 5:
                 print("",end=":")
             else:
@@ -54,7 +54,7 @@ def showpkts_TCP():
 
         print("dst:  ", Dest_ip, "(port) [", end ="")
         for i in range(0,6):
-            print(Dest_mac[i],end="")
+            print("f{Dest_mac[i]:02x}",end="")
             if i < 5:
                 print("",end=":")
             else:
@@ -67,7 +67,7 @@ def showpkts_TCP():
         print(len(data))
         print(total_length)
         to_print = ""
-        for k in range(14+20,total_length):
+        for k in range(20+14,total_length+14):
             to_print += chr(data[k])
             print(chr(data[k]))
         print("",end="   ")
