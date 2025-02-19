@@ -37,6 +37,8 @@ def showpkts_TCP():
         Source_addr = data[30:34]
         Dest_ip = str(Dest_addr[0]) + "." + str(Dest_addr[1]) + "." + str(Dest_addr[2]) + "." + str(Dest_addr[3])
         Source_ip = str(Source_addr[0]) + "." + str(Source_addr[1]) + "." + str(Source_addr[2]) + "." + str(Source_addr[3])
+        Source_port = data[34] + data[35]*16
+        Dest_port = data[36] + data[37]*16
 
         #check to see if it's not an ip packet
         #print(f"{data[12]:02x}", " ", f"{data[13]:02x}")
@@ -44,7 +46,7 @@ def showpkts_TCP():
         if data[12] != packet_type[0] or data[13] != packet_type[1]:
             continue
 
-        print("src:  ", Source_ip, "(port) [", end="")
+        print("src:  ", Source_ip, "(", Source_port, ") [", end="")
         for i in range(0,6):
             print("f{Source_mac[i]:02x}",end="")
             if i < 5:
@@ -52,7 +54,7 @@ def showpkts_TCP():
             else:
                 print("]")
 
-        print("dst:  ", Dest_ip, "(port) [", end ="")
+        print("dst:  ", Dest_ip, "(", Dest_port, ") [", end ="")
         for i in range(0,6):
             print("f{Dest_mac[i]:02x}",end="")
             if i < 5:
@@ -67,7 +69,7 @@ def showpkts_TCP():
         print(len(data))
         print(total_length)
         to_print = ""
-        for k in range(20+14,total_length+14):
+        for k in range(20+14+8,total_length+14):
             to_print += chr(data[k])
             print(chr(data[k]))
         print("",end="   ")
