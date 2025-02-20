@@ -9,7 +9,6 @@ def showpkts_UDP():
 
 
     while 1 == 1:
-        print("hi")
         ETH_P_ALL = 0x0003
         raw_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))
 
