@@ -57,4 +57,4 @@ def showpkts_UDP():
         print("",end="   ")
         print(to_print.encode())
 
-showpkts_TCP()
+showpkts_UDP()
