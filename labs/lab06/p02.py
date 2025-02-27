@@ -5,7 +5,6 @@ import struct
 import random
 
 
-
 def calc_checksum(d):
     total = 0
 
@@ -20,7 +19,7 @@ def calc_checksum(d):
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
-
+s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 #IP header 
 ip_header  = b'\x45\x00\x00\x28'  # Version, IHL, Type of Service | Total Length
 ip_header += b'\xab\xcd\x00\x00'  # Identification | Flags, Fragment Offset
@@ -29,24 +28,30 @@ ip_header += struct.pack(">BBBB", 66, 76, 173, 67)  # Source IP (192.168.173.67)
 ip_header += struct.pack(">BBBB", 192, 168, 172, 5)  # Destination IP (192.168.172.5)
 
 #tcp header
-tcp_header  = struct.pack(">HH",  random.randint(1000, 9999), 9000)# Source Port | Destination Port
-tcp_header += struct.pack(">I",  random.randint(1000, 9999)) # Sequence Number
-tcp_header += struct.pack(">L", 0)  # Acknowledgement Number (0)
-tcp_header += struct.pack(">HH", 0x5002, 0x7110)  # Data Offset, Reserved, Flags | Window Size
+tcp_header = (random.randint(1000,9999)).to_bytes(2, 'big')
+
+tcp_header += (9000).to_bytes(2, 'big')
+print(tcp_header)
+
+tcp_header += struct.pack(">HH",  random.randint(1000, 9999), 9000)# Source Port | Destination Port
+tcp_header += struct.pack(">L",  random.randint(1000, 9999)) # Sequence Number
+tcp_header += b'\x50\x02\x71\x10' # Data Offset, Reserved, Flags | Window Size
 srcip = struct.pack(">BBBB", 66, 76, 173, 67)  # Src IP
 dstip =struct.pack(">BBBB", 192, 168, 172, 5)  # Dst IP
 chksum = calc_checksum(srcip + dstip + struct.pack(">BBH", 0, 6, 20) + tcp_header)
 tcp_header += struct.pack(">H", chksum) #calculate checksum based off first 16
+
 #bytes of header
 tcp_header += b'\x00\x00'# | Urgent Pointer
-
 print(tcp_header)
 
+#print(struct.unpack(">HHi",tcp_header[0:8]), tcp_header[8:16])#,a struct.unpack(">BBBBBBBBHH",tcp_header[16:28]))
 
+
+print(tcp_header)
 #update the checksum
 
 packet = ip_header + tcp_header
 
 addr = ("192.168.172.5", 0)  # Destination IP
 s.sendto(packet, addr)
-
