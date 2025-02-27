@@ -4,6 +4,21 @@ import socket
 import struct
 import random
 
+
+
+def calc_checksum(d):
+    total = 0
+
+    for i in range(0, len(d), 2):
+        total += d[i] * 256 + d[i + 1]
+
+    while total > 0xffff:
+        total = (total >> 16) + (total & 0xffff)
+
+    return total ^ 0xffff
+
+
+
 s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
 
 #IP header 
@@ -24,21 +39,6 @@ chksum = calc_checksum(srcip + dstip + struct.pack(">BBH", 0, 6, 20) + tcp_heade
 tcp_header += struct.pack(">H", chksum) #calculate checksum based off first 16
 #bytes of header
 tcp_header += b'\x00\x00'# | Urgent Pointer
-
-
-def calc_checksum(d):
-    total = 0
-
-    for i in range(0, len(d), 2):
-        total += d[i] * 256 + d[i + 1]
-
-    while total > 0xffff:
-        total = (total >> 16) + (total & 0xffff)
-
-    return total ^ 0xffff
-
-
-
 
 
 
