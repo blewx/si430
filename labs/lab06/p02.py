@@ -7,10 +7,6 @@ import struct
 s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
 
 
-ethernet  = b'\x08\x00\x27\x2e\xc5\x60' # MAC Address Destination
-ethernet += b'\x08\x00\x27\x50\x76\x69' # MAC Address Source
-ethernet += b'\x08\x00'                 # Protocol-Type: IPv4
-
 ip_header  = b'\x45\x00\x00\x28'  # Version, IHL, Type of Service | Total Length
 ip_header += b'\xab\xcd\x00\x00'  # Identification | Flags, Fragment Offset
 ip_header += b'\x40\x06\xa6\xec'  # TTL, Protocol | Header Checksum
