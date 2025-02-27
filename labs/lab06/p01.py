@@ -31,11 +31,10 @@ ip_header += struct.pack(">BBH", ttl, protocol, checksum)
 
 ip_header += struct.pack(">BBBB", 66, 76, 173, 67) # First and Last intials, B L I C
 
-ip_header += struct.pack(">BBBB", 10, 60, 101, 236)
+ip_header += struct.pack(">BBBB",  192, 168, 172, 5)
 
 ip_pkt = ip_header + ip_payload
 
 
-addr = ("10.60.101.236", 9000)
+addr = ("192.168.172.5", 9000)
 raw_socket.sendto(ip_pkt, addr)
-
