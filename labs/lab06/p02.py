@@ -18,7 +18,12 @@ tcp_header  = struct.pack(">HH",  random.randint(1000, 9999), 9000)# Source Port
 tcp_header += struct.pack(">L",  random.randint(1000, 9999)) # Sequence Number
 tcp_header += b'\x00\x00\x00\x00' # Acknowledgement Number
 tcp_header += b'\x50\x02\x71\x10' # Data Offset, Reserved, Flags | Window Size
-tcp_header += b'\xe6\x32\x00\x00' # Checksum | Urgent Pointer
+srcip = struct.pack(">BBBB", 66, 76, 173, 67)  # Src IP
+dstip =struct.pack(">BBBB", 192, 168, 172, 5)  # Dst IP
+chksum = calc_checksum(srcip + dstip + struct.pack(">BBH", 0, 6, 20) + tcp_header)
+tcp_header += struct.pack(">H", chksum) #calculate checksum based off first 16
+#bytes of header
+tcp_header += b'\x00\x00'# | Urgent Pointer
 
 
 def calc_checksum(d):
@@ -33,13 +38,11 @@ def calc_checksum(d):
     return total ^ 0xffff
 
 
-srcip = struct.pack(">BBBB", 66, 76, 173, 67)  # Src IP
-dstip =struct.pack(">BBBB", 192, 168, 172, 5)  # Dst IP
 
 
-chksum = calc_checksum(srcip + dstip + struct.pack(">BBH", 0, 6, 20) + tcp_header)
 
-tcp_header = tcp_header[:16] + struct.pack(">H", chksum) + tcp_header[18:]
+
+#update the checksum
 
 packet = ip_header + tcp_header
 
