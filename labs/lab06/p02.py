@@ -4,7 +4,6 @@ import socket
 import struct
 import random
 
-
 def calc_checksum(d):
     total = 0
 
@@ -15,8 +14,6 @@ def calc_checksum(d):
         total = (total >> 16) + (total & 0xffff)
 
     return total ^ 0xffff
-
-
 
 s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
 s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
@@ -29,10 +26,7 @@ ip_header += struct.pack(">BBBB", 192, 168, 172, 5)  # Destination IP (192.168.1
 
 #tcp header
 tcp_header = (random.randint(1000,9999)).to_bytes(2, 'big')
-
 tcp_header += (9000).to_bytes(2, 'big')
-print(tcp_header)
-
 tcp_header += struct.pack(">HH",  random.randint(1000, 9999), 9000)# Source Port | Destination Port
 tcp_header += struct.pack(">L",  random.randint(1000, 9999)) # Sequence Number
 tcp_header += b'\x50\x02\x71\x10' # Data Offset, Reserved, Flags | Window Size
@@ -43,15 +37,8 @@ tcp_header += struct.pack(">H", chksum) #calculate checksum based off first 16
 
 #bytes of header
 tcp_header += b'\x00\x00'# | Urgent Pointer
-print(tcp_header)
 
-#print(struct.unpack(">HHi",tcp_header[0:8]), tcp_header[8:16])#,a struct.unpack(">BBBBBBBBHH",tcp_header[16:28]))
-
-
-print(tcp_header)
 #update the checksum
-
 packet = ip_header + tcp_header
-
 addr = ("192.168.172.5", 0)  # Destination IP
 s.sendto(packet, addr)
