@@ -2,9 +2,10 @@
 #!/usr/bin/python3
 # p02.py
 import socket
+import struct
 
-s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW)
-s.bind(("eth0", 0))
+s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
+
 
 ethernet  = b'\x00\x0c\x29\xd3\xbe\xd6' # MAC Address Destination
 ethernet += b'\x00\x0c\x29\xe0\xc4\xaf' # MAC Address Source
@@ -22,7 +23,6 @@ tcp_header += b'\x00\x00\x00\x00' # Acknowledgement Number
 tcp_header += b'\x50\x02\x71\x10' # Data Offset, Reserved, Flags | Window Size
 tcp_header += b'\xe6\x32\x00\x00' # Checksum | Urgent Pointer
 
-packet = ethernet + ip_header + tcp_header
-s.send(packet)
-
-
+packet = ip_header + tcp_header
+addr = ("192.168.172.5", 0)
+raw_socket.sendto(packet, addr)
