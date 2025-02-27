@@ -7,8 +7,8 @@ import struct
 s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
 
 
-ethernet  = b'\x00\x0c\x29\xd3\xbe\xd6' # MAC Address Destination
-ethernet += b'\x00\x0c\x29\xe0\xc4\xaf' # MAC Address Source
+ethernet  = b'\x08\x00\x27\x2e\xc5\x60' # MAC Address Destination
+ethernet += b'\x08\x00\x27\x50\x76\x69' # MAC Address Source
 ethernet += b'\x08\x00'                 # Protocol-Type: IPv4
 
 ip_header  = b'\x45\x00\x00\x28'  # Version, IHL, Type of Service | Total Length
@@ -25,4 +25,4 @@ tcp_header += b'\xe6\x32\x00\x00' # Checksum | Urgent Pointer
 
 packet = ip_header + tcp_header
 addr = ("192.168.172.5", 0)
-raw_socket.sendto(packet, addr)
+s.sendto(packet, addr)
