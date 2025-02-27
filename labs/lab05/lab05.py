@@ -47,7 +47,7 @@ def showpkts_UDP():
             if i < 5:
                 print("",end=":")
             else:
-                print("]")
+                print("]"
 
 
         to_print = ""
@@ -56,4 +56,4 @@ def showpkts_UDP():
         print("",end="   ")
         print(to_print.encode())
 
-showpkts_UDP()
+howpkts_UDP()
